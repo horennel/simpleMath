@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成的试卷</title>
+    <script>
+        MathJax = {
+            loader: {
+                load: ['input/tex', 'output/chtml'],
+                paths: {mathjax: "{{ url_for('templates', path='/mathjax') }}"}
+            },
+            tex: {
+                inlineMath: [['$', '$']]
+            },
+            chtml: {
+                fontURL: "{{ url_for('templates', path='/mathjax/es5/output/chtml/fonts/woff-v2') }}"
+            }
+        };
+    </script>
+    <script src="{{ url_for('templates', path='/mathjax/es5/tex-chtml.js') }}"></script>
+    <style>
+        /* 行内公式 */
+        .MathJax {
+            font-size: 105% !important;
+        }
+
+        /* 独立公式 */
+        .MathJax_Display {
+            font-size: 105% !important;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            counter-reset: question-counter;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            page-break-inside: avoid;
+        }
+
+        .question:last-child {
+            border-bottom: none;
+        }
+
+        .question-content {
+            font-size: 16px;
+            margin-left: 30px;
+        }
+
+        .question-number {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .print-button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px auto;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .print-button:hover {
+            background-color: #0b7dda;
+        }
+
+        @media print {
+            .print-button {
+                display: none;
+            }
+
+            body {
+                padding: 0;
+            }
+
+            .question {
+                margin-bottom: 50px;
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="questions">
+    {% for question in questions %}
+    <div class="question">
+        <div class="question-content">
+            <span class="question-number">{{ loop.index }}.</span>
+            {{ question.content }}
+        </div>
+        <div class="answer-space" style="height: 100px; margin-top: 20px;"></div>
+    </div>
+    {% endfor %}
+</div>
+<a href="javascript:window.print()" class="print-button">打印试卷</a>
+<a href="/" class="print-button" style="background-color: #f44336;">返回首页</a>
+</body>
+</html>
